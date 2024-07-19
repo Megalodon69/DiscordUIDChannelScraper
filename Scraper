@@ -1,0 +1,43 @@
+import discord
+from discord.ext import commands
+
+# Use your normal account's token
+TOKEN = 'UID_token'  # Replace with your actual user token
+
+# Hardcoded channel ID
+CHANNEL_ID = Channel_ID # Replace with the actual channel ID
+
+# Initialize the self-bot
+bot = commands.Bot(command_prefix='!', self_bot=True)
+
+@bot.event
+async def on_ready():
+    print(f'Logged in as {bot.user}')
+    # Optionally, you can fetch the last 100 messages when the bot starts
+    await savemessages()
+
+async def savemessages():
+    channel = bot.get_channel(CHANNEL_ID)
+    if channel is None:
+        print('Channel not found.')
+        return
+    
+    messages = []
+    async for message in channel.history(limit=100): # how many old messages will be saved
+        messages.append(message)
+    
+    with open('messages.txt', 'w', encoding='utf-8') as f:
+        for msg in messages:
+            f.write(f'{msg.created_at} - {msg.author}: {msg.content}\n')
+
+    print(f'Saved {len(messages)} messages from {channel.name}.')
+
+@bot.event
+async def on_message(message):
+    if message.channel.id == CHANNEL_ID and message.author != bot.user:
+        with open('messages.txt', 'a', encoding='utf-8') as f:
+            f.write(f'{message.created_at} - {message.author}: {message.content}\n')
+        print(f'Saved new message from {message.author}: {message.content}')
+
+# Run the self-bot
+bot.run(TOKEN)
