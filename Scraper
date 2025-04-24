@@ -1,13 +1,12 @@
 import discord
 from discord.ext import commands
 
-# Use your normal account's token
-TOKEN = 'UID_token'  # Replace with your actual user token
+TOKEN = 'UID_token'
 
-# Hardcoded channel ID
-CHANNEL_ID = Channel_ID # Replace with the actual channel ID
+# channel ID
+CHANNEL_ID = Channel_ID
 
-# Initialize the self-bot
+
 bot = commands.Bot(command_prefix='!', self_bot=True)
 
 @bot.event
